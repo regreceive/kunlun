@@ -5,7 +5,7 @@
 module.exports = {
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://localhost/expressangular-dev'
+    uri: 'mongodb://localhost/message-dev'
   },
 
   seedDB: true

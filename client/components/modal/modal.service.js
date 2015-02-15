@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('expressAngularApp')
+angular.module('messageApp')
   .factory('Modal', function ($rootScope, $modal) {
     /**
      * Opens a modal

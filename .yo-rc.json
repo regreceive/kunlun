@@ -11,10 +11,15 @@
     "filters": {
       "js": true,
       "jade": true,
-      "less": true,
+      "sass": true,
       "ngroute": true,
       "bootstrap": true,
-      "uibootstrap": true
+      "uibootstrap": true,
+      "socketio": true,
+      "mongoose": true,
+      "auth": true,
+      "oauth": true,
+      "googleAuth": true
     }
   },
   "generator-ng-component": {

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('expressAngularApp')
+angular.module('messageApp')
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

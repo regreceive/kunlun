@@ -1,4 +1,4 @@
-// Generated on 2015-02-04 using generator-angular-fullstack 2.0.13
+// Generated on 2015-02-15 using generator-angular-fullstack 2.0.13
 'use strict';
 
 module.exports = function (grunt) {
@@ -79,15 +79,15 @@ module.exports = function (grunt) {
         ],
         tasks: ['newer:jshint:all', 'karma']
       },
-      injectLess: {
+      injectSass: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.less'],
-        tasks: ['injector:less']
+          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
+        tasks: ['injector:sass']
       },
-      less: {
+      sass: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.less'],
-        tasks: ['less', 'autoprefixer']
+          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
+        tasks: ['sass', 'autoprefixer']
       },
       jade: {
         files: [
@@ -312,10 +312,13 @@ module.exports = function (grunt) {
     },
 
     // Package all the html partials into a single javascript payload
+    // 其实就是生成导入的html的相关js文件，然后加入到useminPrepare生成的concat.generated对象中。加入的位置是通过判断下面的usemin值与
+    // uglify.generated中dest是否匹配，如果匹配则追加到concat.generated下、dest匹配的的src中
+    // 此插件完成的操作只是更新了grunt的config设置，并没有进行追加到某js文件的写入操作
     ngtemplates: {
       options: {
         // This should be the name of your apps angular module
-        module: 'expressAngularApp',
+        module: 'messageApp',
         htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
@@ -410,11 +413,11 @@ module.exports = function (grunt) {
     concurrent: {
       server: [
         'jade',
-        'less',
+        'sass',
       ],
       test: [
         'jade',
-        'less',
+        'sass',
       ],
       debug: {
         tasks: [
@@ -427,7 +430,7 @@ module.exports = function (grunt) {
       },
       dist: [
         'jade',
-        'less',
+        'sass',
         'imagemin',
         'svgmin'
       ]
@@ -491,20 +494,21 @@ module.exports = function (grunt) {
       }
     },
 
-    // Compiles Less to CSS
-    less: {
-      options: {
-        paths: [
-          '<%= yeoman.client %>/bower_components',
-          '<%= yeoman.client %>/app',
-          '<%= yeoman.client %>/components'
-        ]
-      },
+    // Compiles Sass to CSS
+    sass: {
       server: {
+        options: {
+          loadPath: [
+            '<%= yeoman.client %>/bower_components',
+            '<%= yeoman.client %>/app',
+            '<%= yeoman.client %>/components'
+          ],
+          compass: false
+        },
         files: {
-          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.less'
+          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.scss'
         }
-      },
+      }
     },
 
     injector: {
@@ -532,8 +536,8 @@ module.exports = function (grunt) {
         }
       },
 
-      // Inject component less into app.less
-      less: {
+      // Inject component scss into app.scss
+      sass: {
         options: {
           transform: function(filePath) {
             filePath = filePath.replace('/client/app/', '');
@@ -544,9 +548,9 @@ module.exports = function (grunt) {
           endtag: '// endinjector'
         },
         files: {
-          '<%= yeoman.client %>/app/app.less': [
-            '<%= yeoman.client %>/{app,components}/**/*.less',
-            '!<%= yeoman.client %>/app/app.less'
+          '<%= yeoman.client %>/app/app.scss': [
+            '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}',
+            '!<%= yeoman.client %>/app/app.{scss,sass}'
           ]
         }
       },
@@ -596,7 +600,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'injector:less', 
+        'injector:sass',
         'concurrent:server',
         'injector',
         'wiredep',
@@ -608,7 +612,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'env:all',
-      'injector:less', 
+      'injector:sass',
       'concurrent:server',
       'injector',
       'wiredep',
@@ -638,7 +642,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'injector:less', 
+        'injector:sass',
         'concurrent:test',
         'injector',
         'autoprefixer',
@@ -651,7 +655,7 @@ module.exports = function (grunt) {
         'clean:server',
         'env:all',
         'env:test',
-        'injector:less', 
+        'injector:sass',
         'concurrent:test',
         'injector',
         'wiredep',
@@ -669,7 +673,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'injector:less', 
+    'injector:sass',
     'concurrent:dist',
     'injector',
     'wiredep',
